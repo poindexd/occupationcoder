@@ -129,7 +129,7 @@ def replace_punctuation(s):
     return s
 
 
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
 class MLStripper(HTMLParser):
     def __init__(self):
         self.reset()
@@ -138,18 +138,6 @@ class MLStripper(HTMLParser):
         self.fed.append(d)
     def get_data(self):
         return ' '.join(self.fed)
-
-
-def strip_tags(html):
-    """
-    Takes string as input.
-    Removes html tags.
-    Returns a string.
-
-    """
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
 
 
 def clean_title(dataframe_row):
@@ -176,7 +164,7 @@ def clean_title(dataframe_row):
     4              care assistant worker
     dtype: object
     """
-    lower = strip_tags(dataframe_row['job_title']).lower()
+    lower = dataframe_row['job_title'].lower()
     lemm = lemmatise(lower.split())
     exp = lookup_replacement(lemm, expand_dict)
     known = replace_unknown(' '.join(exp)).strip()
@@ -195,7 +183,7 @@ def clean_desc(dataframe_row):
     Returns a string.
 
     """
-    lower = strip_tags(dataframe_row['job_description']).lower()
+    lower = dataframe_row['job_description'].lower()
     lemm = lemmatise(lower.split())
     exp = lookup_replacement(lemm, expand_dict)
     nopunct = replace_punctuation(' '.join(exp))
